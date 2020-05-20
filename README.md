@@ -1,1 +1,1 @@
-# pomodoro
+Project website for The Odin Project based on the Pomodoro technique. I actually use this technique while working, and find it amusing my curriculum is having me build a website based on a tool that has helped me so much. 
