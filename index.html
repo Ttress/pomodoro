@@ -1,25 +1,65 @@
 <html>
+    
     <head>
         <title>Pomodoro technique</title>
         <link href="style.css" type="text/css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap" rel="stylesheet">
     </head>
+    
     <body>
         
         <div class="wrapper">
-            <h1>Pomodoro</h1>
             
-            <div class="buttonContainer">
-                <div class="button session" id="shortsession"></div>
-                <div class="button session" id="longsession"></div>
-                <div class="button break" id="shortbreak"></div>
-                <div class="button break" id="longbreak"></div>
-            </div>
-
-            <div id="timerContainer">
-
+            <div id="headerContainer">
+                <h1>Pomodoro</h1>
             </div>
             
+            <div class="sessionContainer">
+                <button class="button setting active" data-time="25:00" id="shortsession">short<br>ses</button>
+                <button class="button setting" data-time="50:00" id="longsession">long<br>ses</button>
+                <button class="button setting" data-time="5:00" id="shortbreak">short<br>brk</button>
+                <button class="button setting" data-time="10:00" id="longbreak">long<br>brk</button>
+            </div>
+
+            <div class="timerContainer">
+                <div id="timer">25:00</div>
+            </div>
+
+            <div class="controlsContainer">
+                <button class="button controls" id="playPause">▶</button>
+                <button class="button controls" id="reset"><span id="beHigherPlease">🔄</span></button>
+            </div>
+
         </div>
+
+        <script>
+            
+            const settingButtons = document.querySelectorAll('.setting');
+            settingButtons.forEach(button => button.addEventListener('click', settingChosen));
+            
+            const controlButtons = document.querySelectorAll('.controls');
+            controlButtons.forEach(button => button.addEventListener('click', controlChosen));
+            
+            const timer = document.querySelector("#timer");
+            
+            let lastchosen = document.querySelector("#shortsession");
+
+            function settingChosen() {
+                if (lastchosen !== this) {
+                    this.classList.toggle('active');
+                    lastchosen.classList.remove('active');
+                } 
+                timer.innerHTML = this.dataset.time;
+                lastchosen = this;
+
+            }
+
+            function controlChosen() {
+                console.log(this);
+            }
+
+
+        </script>
 
     </body>
 
