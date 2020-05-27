@@ -15,14 +15,14 @@
             </div>
             
             <div class="sessionContainer">
-                <button class="button setting active" data-time="25:00" id="shortsession">short<br>ses</button>
-                <button class="button setting" data-time="50:00" id="longsession">long<br>ses</button>
-                <button class="button setting" data-time="5:00" id="shortbreak">short<br>brk</button>
-                <button class="button setting" data-time="10:00" id="longbreak">long<br>brk</button>
+                <button class="button setting active" data-time="1500" id="shortsession">short<br>ses</button>
+                <button class="button setting" data-time="3000" id="longsession">long<br>ses</button>
+                <button class="button setting" data-time="300" id="shortbreak">short<br>brk</button>
+                <button class="button setting" data-time="600" id="longbreak">long<br>brk</button>
             </div>
 
             <div class="timerContainer">
-                <div id="timer">25:00</div>
+                <div id="timer"></div>
             </div>
 
             <div class="controlsContainer">
@@ -37,25 +37,43 @@
             const settingButtons = document.querySelectorAll('.setting');
             settingButtons.forEach(button => button.addEventListener('click', settingChosen));
             
-            const controlButtons = document.querySelectorAll('.controls');
-            controlButtons.forEach(button => button.addEventListener('click', controlChosen));
-            
-            const timer = document.querySelector("#timer");
-            
-            let lastchosen = document.querySelector("#shortsession");
+            const startSetting = document.querySelector('#shortsession');
+            let lastchosen = startSetting;
 
+            const timer = document.querySelector('#timer');
+            let freshTimer = true;
+            let currentTime = startSetting.dataset.time;
+            displayTime();
+
+           
             function settingChosen() {
                 if (lastchosen !== this) {
                     this.classList.toggle('active');
-                    lastchosen.classList.remove('active');
+                    lastchosen.classList.toggle('active');
                 } 
-                timer.innerHTML = this.dataset.time;
+                currentTime = this.dataset.time;
+                displayTime();
                 lastchosen = this;
-
             }
 
-            function controlChosen() {
-                console.log(this);
+            function pressPlay() {
+                if (freshTimer) {
+                    freshTimer = false;
+                    updateClock(currentTime);
+                }
+            }
+            
+            function updateClock(currentTime) {
+            }
+
+            function displayTime() {
+                if ((currentTime % 60) === 0) {
+                    timer.innerHTML = (currentTime / 60) + ":" + (currentTime % 60) + 0;
+                } else if ((currentTime % 60) < 10) {
+                    timer.innerHTML = (currentTime / 60) + ":" + 0 + (currentTime % 60);
+                } else {
+                    timer.innerHTML = (currentTime / 60) + ":" + (currentTime % 60);
+                }
             }
 
 
