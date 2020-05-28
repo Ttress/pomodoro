@@ -34,19 +34,29 @@
 
         <script>
             
-            const settingButtons = document.querySelectorAll('.setting');
-            settingButtons.forEach(button => button.addEventListener('click', settingChosen));
-            
             const startSetting = document.querySelector('#shortsession');
             let lastchosen = startSetting;
-
+            
             const timer = document.querySelector('#timer');
-            let freshTimer = true;
             let currentTime = startSetting.dataset.time;
             displayTime();
+            
+            let clockRunning = false;
+            
+            const settingButtons = document.querySelectorAll('.setting');
+            settingButtons.forEach(button => button.addEventListener('click', settingChosen));
+                                     
+            const playButton = document.querySelector('#playpause');
+            playButton.addEventListener('click', pressPlay);
 
-           
+            const resetButton = document.querySelector('#reset');
+            resetButton.addEventListener('click', pressReset);
+
             function settingChosen() {
+                if (clockRunning) {
+                    clockRunning = !clockRunning;
+                    playButton.innerHTML = "▶"
+                }
                 if (lastchosen !== this) {
                     this.classList.toggle('active');
                     lastchosen.classList.toggle('active');
@@ -57,25 +67,39 @@
             }
 
             function pressPlay() {
-                if (freshTimer) {
-                    freshTimer = false;
-                    updateClock(currentTime);
+                clockRunning = !clockRunning;
+                if (playButton.innerHTML === "▶") {
+                    playButton.innerHTML = "❚❚"
+                } else {
+                    playButton.innerHTML = "▶"
                 }
+            }
+
+            function pressReset() {
+                currentTime = lastchosen.dataset.time;
+                displayTime();
+                if (clockRunning) {
+                    clockRunning = !clockRunning;
+                }
+                playButton.innerHTML = "▶";
             }
             
-            function updateClock(currentTime) {
-            }
-
             function displayTime() {
                 if ((currentTime % 60) === 0) {
-                    timer.innerHTML = (currentTime / 60) + ":" + (currentTime % 60) + 0;
+                    timer.innerHTML = Math.floor((currentTime / 60)) + ":" + (currentTime % 60) + 0;
                 } else if ((currentTime % 60) < 10) {
-                    timer.innerHTML = (currentTime / 60) + ":" + 0 + (currentTime % 60);
+                    timer.innerHTML = Math.floor((currentTime / 60)) + ":" + 0 + (currentTime % 60);
                 } else {
-                    timer.innerHTML = (currentTime / 60) + ":" + (currentTime % 60);
+                    timer.innerHTML = Math.floor((currentTime / 60)) + ":" + (currentTime % 60);
                 }
             }
 
+            setInterval( function tickingClock() {
+                if (clockRunning) {
+                    currentTime -= 1;
+                    displayTime();
+                } 
+            }, 1000);
 
         </script>
 
