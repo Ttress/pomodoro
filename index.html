@@ -26,9 +26,19 @@
             </div>
 
             <div class="controlsContainer">
-                <button class="button controls" id="playPause">▶</button>
-                <button class="button controls" id="reset"><span id="beHigherPlease">🔄</span></button>
+                <button class="button controls" id="playPause">▶️</button> 
+                <button class="button controls" id="reset">🔁</button>
             </div>
+
+            <div class="soundsContainer">
+                <button class='button sounds active' id="alarmButton">Alarm</button>
+                <button class='button sounds' id="yayButton">Yay</button>
+                <button class='button sounds' id="borkButton">Bork</button>
+            </div>
+
+            <audio src="alarmClock.mp3" id="alarmSound"></audio>
+            <audio src="gruntHeadshot.mp3" id="yaySound"></audio>
+            <audio src="dogBork.mp3" id="borkSound"></audio>
 
         </div>
 
@@ -52,10 +62,15 @@
             const resetButton = document.querySelector('#reset');
             resetButton.addEventListener('click', pressReset);
 
+            const soundButtons = document.querySelectorAll('.sounds');
+            soundButtons.forEach(button => button.addEventListener('click', soundChosen));
+            const startSound = document.querySelector('#alarmButton');
+            let currentSound = startSound; 
+
             function settingChosen() {
                 if (clockRunning) {
                     clockRunning = !clockRunning;
-                    playButton.innerHTML = "▶"
+                    playButton.innerHTML = "▶️"
                 }
                 if (lastchosen !== this) {
                     this.classList.toggle('active');
@@ -66,12 +81,20 @@
                 lastchosen = this;
             }
 
+            function soundChosen() {
+                if (currentSound !== this) {
+                    this.classList.toggle('active');
+                    currentSound.classList.toggle('active');
+                    currentSound = this;
+                }
+            }
+
             function pressPlay() {
                 clockRunning = !clockRunning;
-                if (playButton.innerHTML === "▶") {
-                    playButton.innerHTML = "❚❚"
+                if (playButton.innerHTML === "▶️") {
+                    playButton.innerHTML = "⏸️"
                 } else {
-                    playButton.innerHTML = "▶"
+                    playButton.innerHTML = "▶️"
                 }
             }
 
@@ -81,7 +104,7 @@
                 if (clockRunning) {
                     clockRunning = !clockRunning;
                 }
-                playButton.innerHTML = "▶";
+                playButton.innerHTML = "▶️";
             }
             
             function displayTime() {
@@ -94,12 +117,29 @@
                 }
             }
 
+            function playSound() {
+                if (currentSound.id == 'alarmButton') {
+                    document.getElementById('alarmSound').play();
+                    pressReset();
+                } else if (currentSound.id == 'yayButton') {
+                    document.getElementById('yaySound').play();
+                    pressReset();
+                } else if (currentSound.id == 'borkButton') {
+                    document.getElementById('borkSound').play();
+                    pressReset();
+                }
+            }
+
             setInterval( function tickingClock() {
-                if (clockRunning) {
+                if (clockRunning && currentTime != 0) {
                     currentTime -= 1;
                     displayTime();
-                } 
+                } else if (currentTime == 0) {
+                    playSound();
+                }
             }, 1000);
+
+            
 
         </script>
 
